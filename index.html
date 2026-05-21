@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Australian Sports</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f6f4ef;
+      color: #1d1d1d;
+    }
+
+    .container {
+      width: 1100px;
+      margin: auto;
+      background: white;
+      padding: 40px;
+    }
+
+    h1 {
+      font-size: 42px;
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      margin-top: 50px;
+      color: #124734;
+    }
+
+    p {
+      font-size: 17px;
+      line-height: 1.5;
+      max-width: 850px;
+    }
+
+    .chart {
+      margin-top: 20px;
+      margin-bottom: 40px;
+    }
+
+    .note {
+      background: #eef5ef;
+      border-left: 6px solid #124734;
+      padding: 12px;
+      margin: 20px 0;
+      max-width: 850px;
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <h1>Australian Sports</h1>
+  <p>
+    This visualisation explores how Australians connect with sport through participation,
+    location, gender, age, attendance and venue use. The story focuses on how different
+    sports build different pathways into Australian sporting culture.
+  </p>
+
+  <div class="note">
+    Key message: Australian sport is not dominated by one single pattern. Different sports
+    attract people through different entry points, regions and audiences.
+  </div>
+
+  <h2>1. How do people enter different sports?</h2>
+  <p>
+    This stacked bar chart compares the main participation pathways across sports.
+    School sport and friends are important entry points, but media exposure and family
+    influence also shape how people first connect with sport.
+  </p>
+  <div id="vis1" class="chart"></div>
+
+  <h2>2. Which sports dominate different Australian states?</h2>
+  <p>
+    This map-style tile visualisation gives a quick geographic overview of the leading
+    sport in each state or territory. It works as a simplified map for the peer review
+    version and can later be upgraded into a full choropleth map.
+  </p>
+  <div id="vis2" class="chart"></div>
+
+  <h2>3. How does age affect sport preference?</h2>
+  <p>
+    This heatmap shows how strongly each age group is connected with each sport.
+    Darker cells indicate stronger interest or participation.
+  </p>
+  <div id="vis3" class="chart"></div>
+
+  <h2>4. How has attendance changed over time?</h2>
+  <p>
+    This streamgraph-style area chart compares how attendance patterns change across
+    sports over several years.
+  </p>
+  <div id="vis4" class="chart"></div>
+
+  <h2>5. How do funding and participation compare?</h2>
+  <p>
+    This connected scatter plot compares funding and participation. It helps reveal
+    which sports have high participation but relatively lower funding.
+  </p>
+  <div id="vis5" class="chart"></div>
+
+  <h2>6. Which sports convert fans into active participants?</h2>
+  <p>
+    This funnel chart shows how the audience narrows from awareness to active
+    participation.
+  </p>
+  <div id="vis6" class="chart"></div>
+
+  <h2>7. Which venues are used most effectively?</h2>
+  <p>
+    This lollipop chart compares venue capacity and actual usage. It highlights the gap
+    between available sporting infrastructure and real use.
+  </p>
+  <div id="vis7" class="chart"></div>
+    <h2>8. Australian Sports Geography</h2>
+<p>
+This choropleth map shows the dominant sport associated with each Australian state or territory.
+The colour represents the leading sport, while the tooltip shows the state and sport name.
+</p>
+<div id="vis8" class="chart"></div>
+
+  <h2>Conclusion</h2>
+  <p>
+    Overall, Australian sport is shaped by a combination of place, community, school,
+    gender, media and infrastructure. The most successful sports are not only popular;
+    they also create strong pathways from casual interest to long-term participation.
+  </p>
+
+  <p><b>Author:</b> Haoyu Zhong | <b>Date:</b> May 2026</p>
+  <p><b>Data note:</b> Prototype dataset prepared for peer review. Final version should replace
+  demo values with sourced Australian sport statistics.</p>
+
+  
+
+</div>
+
+<script>
+const chart1 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 650,
+  "height": 380,
+  "data": {"url": "data/participation_pathways.csv", "format": {"type": "csv"}},
+  "mark": "bar",
+  "encoding": {
+    "x": {"field": "sport", "type": "nominal", "title": "Sport"},
+    "y": {"field": "percent", "type": "quantitative", "title": "Percentage"},
+    "color": {"field": "entry_point", "type": "nominal", "title": "Entry Point"},
+    "tooltip": [
+      {"field": "sport"},
+      {"field": "entry_point"},
+      {"field": "outcome"},
+      {"field": "percent"}
+    ]
+  }
+};
+
+const chart2 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 650,
+  "height": 350,
+  "data": {"url": "data/dominant_sport_by_state.csv", "format": {"type": "csv"}},
+  "mark": "bar",
+  "encoding": {
+    "x": {"field": "state", "type": "nominal", "title": "State"},
+    "y": {"field": "popularity_index", "type": "quantitative", "title": "Popularity Index"},
+    "color": {"field": "sport", "type": "nominal", "title": "Dominant Sport"},
+    "tooltip": [
+      {"field": "state"},
+      {"field": "sport"},
+      {"field": "popularity_index"},
+      {"field": "participants"}
+    ]
+  }
+};
+
+const chart2Text = {
+  "mark": {"type": "text", "fontSize": 15, "fontWeight": "bold"},
+  "encoding": {
+    "x": {"field": "x", "type": "ordinal"},
+    "y": {"field": "y", "type": "ordinal"},
+    "text": {"field": "state"}
+  }
+};
+
+const chart3 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 650,
+  "height": 350,
+  "data": {"url": "data/age_gender_sport_matrix.csv", "format": {"type": "csv"}},
+  "mark": "rect",
+  "encoding": {
+    "x": {"field": "sport", "type": "nominal", "title": "Sport"},
+    "y": {"field": "age_group", "type": "nominal", "title": "Age Group"},
+    "color": {"field": "participation_index", "type": "quantitative", "title": "Participation Index"},
+    "tooltip": [
+      {"field": "sport"},
+      {"field": "age_group"},
+      {"field": "gender"},
+      {"field": "participation_index"}
+    ]
+  }
+};
+
+const chart4 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 650,
+  "height": 350,
+  "data": {"url": "data/attendance_streamgraph.csv", "format": {"type": "csv"}},
+  "mark": "area",
+  "encoding": {
+    "x": {"field": "year", "type": "ordinal", "title": "Year"},
+    "y": {
+      "field": "attendance_millions",
+      "type": "quantitative",
+      "stack": "center",
+      "title": "Attendance Millions"
+    },
+    "color": {"field": "sport", "type": "nominal", "title": "Sport"},
+    "tooltip": [
+      {"field": "year"},
+      {"field": "sport"},
+      {"field": "attendance_millions"}
+    ]
+  }
+};
+
+const chart5 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 650,
+  "height": 380,
+  "data": {"url": "data/funding_vs_medals.csv", "format": {"type": "csv"}},
+  "mark": {"type": "circle", "size": 160},
+  "encoding": {
+    "x": {
+      "field": "funding_million_aud",
+      "type": "quantitative",
+      "title": "Funding ($ million AUD)"
+    },
+    "y": {
+      "field": "major_event_medals",
+      "type": "quantitative",
+      "title": "Major Event Medals"
+    },
+    "color": {"field": "sport", "type": "nominal", "title": "Sport"},
+    "tooltip": [
+      {"field": "sport"},
+      {"field": "funding_million_aud"},
+      {"field": "major_event_medals"}
+    ]
+  }
+};
+
+const chart6 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 650,
+  "height": 350,
+  "data": {"url": "data/sports_fan_funnel.csv", "format": {"type": "csv"}},
+  "mark": "bar",
+  "encoding": {
+    "y": {
+      "field": "stage",
+      "type": "ordinal",
+      "sort": null,
+      "title": "Fan Journey Stage"
+    },
+    "x": {
+      "field": "percent_of_audience",
+      "type": "quantitative",
+      "title": "Percent of Audience"
+    },
+    "color": {
+      "field": "stage",
+      "type": "nominal",
+      "legend": null
+    },
+    "tooltip": [
+      {"field": "stage"},
+      {"field": "percent_of_audience"}
+    ]
+  }
+};
+
+const chart7 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 650,
+  "height": 380,
+  "data": {"url": "data/venue_capacity_utilisation.csv", "format": {"type": "csv"}},
+  "layer": [
+    {
+      "mark": "rule",
+      "encoding": {
+        "y": {"field": "venue", "type": "nominal", "title": "Venue"},
+        "x": {
+          "field": "capacity_thousand",
+          "type": "quantitative",
+          "title": "Capacity / Attendance"
+        },
+        "x2": {"field": "annual_attendance_millions"}
+      }
+    },
+    {
+      "mark": {"type": "circle", "size": 140},
+      "encoding": {
+        "y": {"field": "venue", "type": "nominal"},
+        "x": {
+          "field": "annual_attendance_millions",
+          "type": "quantitative"
+        },
+        "color": {"field": "main_sport", "type": "nominal", "title": "Main Sport"},
+        "tooltip": [
+          {"field": "venue"},
+          {"field": "main_sport"},
+          {"field": "capacity_thousand"},
+          {"field": "annual_attendance_millions"},
+          {"field": "utilisation_percent"}
+        ]
+      }
+    }
+  ]
+};
+
+const chart8 = {
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 650,
+  "height": 420,
+
+  "data": {
+    "url": "https://raw.githubusercontent.com/rowanhogan/australian-states/master/states.geojson",
+    "format": {"type": "json", "property": "features"}
+  },
+
+  "transform": [
+    {
+      "calculate": "datum.properties.STATE_NAME == 'Victoria' ? 'AFL' : datum.properties.STATE_NAME == 'New South Wales' ? 'Rugby League' : datum.properties.STATE_NAME == 'Queensland' ? 'Rugby League' : datum.properties.STATE_NAME == 'Western Australia' ? 'Cricket' : datum.properties.STATE_NAME == 'South Australia' ? 'AFL' : datum.properties.STATE_NAME == 'Tasmania' ? 'AFL' : datum.properties.STATE_NAME == 'Northern Territory' ? 'AFL' : 'Basketball'",
+      "as": "dominant_sport"
+    },
+    {
+      "calculate": "datum.properties.STATE_NAME == 'Victoria' ? 'VIC' : datum.properties.STATE_NAME == 'New South Wales' ? 'NSW' : datum.properties.STATE_NAME == 'Queensland' ? 'QLD' : datum.properties.STATE_NAME == 'Western Australia' ? 'WA' : datum.properties.STATE_NAME == 'South Australia' ? 'SA' : datum.properties.STATE_NAME == 'Tasmania' ? 'TAS' : datum.properties.STATE_NAME == 'Northern Territory' ? 'NT' : 'ACT'",
+      "as": "abbr"
+    }
+  ],
+
+  "layer": [
+    {
+      "mark": {
+        "type": "geoshape",
+        "stroke": "white",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "color": {
+          "field": "dominant_sport",
+          "type": "nominal",
+          "title": "Dominant Sport"
+        },
+        "tooltip": [
+          {"field": "properties.STATE_NAME", "title": "State"},
+          {"field": "dominant_sport", "title": "Dominant Sport"}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "fontSize": 13,
+        "fontWeight": "bold",
+        "color": "black"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "properties.longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "properties.latitude",
+          "type": "quantitative"
+        },
+        "text": {"field": "abbr"}
+      }
+    }
+  ],
+
+  "projection": {"type": "mercator"}
+};
+
+vegaEmbed("#vis8", chart8);
+vegaEmbed("#vis1", chart1);
+vegaEmbed("#vis2", chart2);
+vegaEmbed("#vis3", chart3);
+vegaEmbed("#vis4", chart4);
+vegaEmbed("#vis5", chart5);
+vegaEmbed("#vis6", chart6);
+vegaEmbed("#vis7", chart7);
+vegaEmbed("#vis8", chart8);
+</script>
+
+</body>
+</html>
