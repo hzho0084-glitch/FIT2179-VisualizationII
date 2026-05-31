@@ -218,14 +218,59 @@ const chart3 = {
 const chart4 = {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": 760,
-  "height": 390,
-  "data": csv("attendance_streamgraph.csv"),
+  "height": 360,
+
+  "data": {
+    "url": "data/attendance_streamgraph.csv",
+    "format": {"type": "csv"}
+  },
+
+  "params": [
+    {
+      "name": "hover",
+      "select": {
+        "type": "point",
+        "fields": ["sport"],
+        "on": "mouseover"
+      }
+    }
+  ],
+
   "mark": "area",
+
   "encoding": {
-    "x": {"field": "year", "type": "ordinal", "title": "Year"},
-    "y": {"field": "attendance_millions", "type": "quantitative", "stack": "center", "title": "Attendance, millions"},
-    "color": {"field": "sport", "type": "nominal", "title": "Sport"},
-    "tooltip": [{"field": "year"}, {"field": "sport"}, {"field": "attendance_millions"}]
+    "x": {
+      "field": "year",
+      "type": "ordinal",
+      "title": "Year"
+    },
+
+    "y": {
+      "field": "attendance_millions",
+      "type": "quantitative",
+      "stack": "center",
+      "title": "Attendance Millions"
+    },
+
+    "color": {
+      "field": "sport",
+      "type": "nominal",
+      "title": "Sport"
+    },
+
+    "opacity": {
+      "condition": {
+        "param": "hover",
+        "value": 1
+      },
+      "value": 0.25
+    },
+
+    "tooltip": [
+      {"field": "year"},
+      {"field": "sport"},
+      {"field": "attendance_millions", "title": "Attendance (millions)"}
+    ]
   }
 };
 
