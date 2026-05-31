@@ -171,7 +171,12 @@ const chart1 = {
   "data": csv("participation_pathways.csv"),
   "mark": {"type": "bar", "cornerRadiusEnd": 2},
   "encoding": {
-    "x": {"field": "sport", "type": "nominal", "title": "Sport"},
+    "x": {
+  "field": "sport",
+  "type": "nominal",
+  "title": "Sport",
+  "axis": {"labelAngle": 0}
+},
     "y": {"field": "percent", "type": "quantitative", "title": "Percentage", "stack": "zero"},
     "color": {"field": "entry_point", "type": "nominal", "title": "Entry Point"},
     "tooltip": [{"field": "sport"}, {"field": "entry_point"}, {"field": "outcome"}, {"field": "percent"}]
@@ -245,10 +250,11 @@ const chart4 = {
 
   "encoding": {
     "x": {
-      "field": "year",
-      "type": "ordinal",
-      "title": "Year"
-    },
+  "field": "year",
+  "type": "ordinal",
+  "title": "Year",
+  "axis": {"labelAngle": 0}
+},
 
     "y": {
       "field": "attendance_millions",
@@ -377,7 +383,12 @@ const chart9 = {
   "data": csv("funding_vs_medals.csv"),
   "mark": {"type": "line", "point": true, "strokeWidth": 2},
   "encoding": {
-    "x": {"field": "year", "type": "ordinal", "title": "Year"},
+    "x": {
+  "field": "year",
+  "type": "ordinal",
+  "title": "Year",
+  "axis": {"labelAngle": 0}
+},
     "y": {"field": "funding_million_aud", "type": "quantitative", "title": "Funding ($ million AUD)", "scale": {"zero": false}},
     "color": {"field": "sport", "type": "nominal", "title": "Sport"},
     "detail": {"field": "sport"},
@@ -392,7 +403,12 @@ const chart10 = {
   "data": csv("state_sport_popularity.csv"),
   "mark": {"type": "circle", "opacity": 0.8},
   "encoding": {
-    "x": {"field": "state_code", "type": "nominal", "title": "State"},
+    "x": {
+  "field": "state_code",
+  "type": "nominal",
+  "title": "State",
+  "axis": {"labelAngle": 0}
+},
     "y": {"field": "sport", "type": "nominal", "title": "Sport"},
     "size": {"field": "participants", "type": "quantitative", "title": "Participants", "scale": {"range": [80, 1600]}},
     "color": {"field": "participants", "type": "quantitative", "title": "Participants"},
